@@ -2,13 +2,19 @@
   "name": "js-git-modern",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "js-git-modern.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava"
   },
   "keywords": [],
   "author": "William Hilton <wmhilton@gmail.com>",
   "license": "Unlicense",
   "maintainers": [],
-  "contributors": []
+  "contributors": [],
+  "dependencies": {
+    "js-git": "^0.7.7"
+  },
+  "devDependencies": {
+    "ava": "^0.17.0"
+  }
 }
