@@ -47,3 +47,51 @@ test('create a tree using new async/await interface', async t => {
   })
   t.is(treeHash, "648fc86e8557bdabbc2c828a19535f833727fa62")
 })
+
+test('create a commit using original callback', async t => {
+  let repo = new GitRepo
+  t.plan(6)
+  repo._repo.saveAs("blob", "Hello World\n", (err, blobHash) => {
+    t.falsy(err)
+    t.is(blobHash, "557db03de997c86a4a028e1ebd3a1ceb225be238")
+    repo._repo.saveAs("tree", {
+      "greeting.txt": { mode: GitModes.file, hash: blobHash }
+    }, (err, treeHash) => {
+      t.falsy(err)
+      t.is(treeHash, "648fc86e8557bdabbc2c828a19535f833727fa62")
+      repo._repo.saveAs("commit", {
+        author: {
+          name: "Tim Caswell",
+          email: "tim@creationix.com",
+          date: new Date(0)
+        },
+        tree: "648fc86e8557bdabbc2c828a19535f833727fa62",
+        message: "Test commit\n"
+      }, (err, commitHash) => {
+        t.falsy(err)
+        t.is(commitHash, "e956f5c8ba902b6f3bfe45f5a4bede883d7e07c2")
+      })
+    })
+  })
+})
+
+test('create a commit using new async/await interface', async t => {
+  let repo = new GitRepo
+  t.plan(1)
+
+  let blobHash = await repo.saveAs("blob", "Hello World\n")
+  let treeHash = await repo.saveAs("tree", {
+    "greeting.txt": { mode: GitModes.file, hash: blobHash }
+  })
+  let commitHash = await repo.saveAs("commit", {
+    author: {
+      name: "Tim Caswell",
+      email: "tim@creationix.com",
+      date: new Date(0)
+    },
+    tree: "648fc86e8557bdabbc2c828a19535f833727fa62",
+    message: "Test commit\n"
+  })
+
+  t.is(commitHash, "e956f5c8ba902b6f3bfe45f5a4bede883d7e07c2")
+})
