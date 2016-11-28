@@ -95,3 +95,21 @@ test('create a commit using new async/await interface', async t => {
 
   t.is(commitHash, "e956f5c8ba902b6f3bfe45f5a4bede883d7e07c2")
 })
+
+test('load blob using original callback', async t => {
+  t.plan(1)
+  let repo = new GitRepo
+  repo._repo.saveAs("blob", "Hello World\n", (err, blobHash) => {
+    repo._repo.loadAs("text", "557db03de997c86a4a028e1ebd3a1ceb225be238", (err, blob) => {
+      t.is(blob, "Hello World\n")
+    })
+  })
+})
+
+test('load blob using new async/await interface', async t => {
+  t.plan(1)
+  let repo = new GitRepo
+  let blobHash = await repo.saveAs("blob", "Hello World\n")
+  let blob = await repo.loadAs("text", "557db03de997c86a4a028e1ebd3a1ceb225be238")
+  t.is(blob, "Hello World\n")
+})
