@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "main": "js-git-modern.js",
+  "browser": "bundle.js",
   "scripts": {
     "test": "ava",
     "build": "browserify js-git-modern.js --standalone JsGit -o bundle.js"
